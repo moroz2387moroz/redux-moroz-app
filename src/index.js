@@ -1,65 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore } from "redux";
+import reducer from "./reducer";
+import { Provider } from "react-redux";
 
-const initialState = { value: 0 };
-
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "INC":
-      return {
-        ...state,
-        value: state.value + 1,
-      };
-    case "DEC":
-      return {
-        ...state,
-        value: state.value - 1,
-      };
-    case "RND":
-      return {
-        ...state,
-        value: state.value * action.payload,
-      };
-    default:
-      return state;
-  }
-};
+import App from "./components/App";
 
 const store = createStore(reducer);
 
-const update = () => {
-  document.getElementById("counter").textContent = store.getState().value;
-};
-
-store.subscribe(update);
-
-const inc = () => ({ type: "INC" });
-const dec = () => ({ type: "DEC" });
-const rnd = (value) => ({ type: "RND", payload: value });
-
-document.getElementById("increment").addEventListener("click", () => {
-  store.dispatch(inc());
-});
-
-document.getElementById("decrement").addEventListener("click", () => {
-  store.dispatch(dec());
-});
-
-document.getElementById("random").addEventListener("click", () => {
-  const value = Math.floor(Math.random() * 10);
-  store.dispatch(rnd(value));
-});
-
-// let state = reducer(initialState, {type: 'INC'});
-// state = reducer(state, {type: 'INC'});
-// state = reducer(state, {type: 'INC'});
-// state = reducer(state, {type: 'INC'});
-// console.log(state);
-
 ReactDOM.render(
   <React.StrictMode>
-    <></>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root"),
 );
